@@ -16,6 +16,8 @@
 
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <equalsverifier.version>2.4</equalsverifier.version>
+
+        <junit-quickcheck.version>0.7</junit-quickcheck.version>
     </properties>
 
     <dependencyManagement>
@@ -26,6 +28,20 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- for property based testing -->
+            <dependency>
+                <groupId>com.pholser</groupId>
+                <artifactId>junit-quickcheck-core</artifactId>
+                <version>${junit-quickcheck.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.pholser</groupId>
+                <artifactId>junit-quickcheck-generators</artifactId>
+                <version>${junit-quickcheck.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -70,6 +86,16 @@
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier</artifactId>
             <version>${equalsverifier.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.pholser</groupId>
+            <artifactId>junit-quickcheck-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.pholser</groupId>
+            <artifactId>junit-quickcheck-generators</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

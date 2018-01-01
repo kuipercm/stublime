@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import javax.xml.xpath.XPathFactory;
-
 import nl.bldn.project.stublime.model.ResponseKey;
 import nl.bldn.project.stublime.model.StubResponse;
 import nl.bldn.project.stublime.repository.impl.InMemoryStubResponseRepository;
@@ -23,7 +21,6 @@ import lombok.AllArgsConstructor;
 public class StubResponseService {
     private final InMemoryStubResponseRepository repository;
     private final StubResponseValidator validator;
-    private final XPathFactory xPathFactory = XPathFactory.newInstance();
 
     public List<StubResponse> getAllResponses() {
         return repository.getAllStubResponses();
