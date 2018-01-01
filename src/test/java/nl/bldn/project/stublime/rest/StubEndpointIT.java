@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import nl.bldn.project.stublime.model.ResponseDefinition;
 import nl.bldn.project.stublime.model.StubResponse;
-import nl.bldn.project.stublime.service.StubDelayService;
 import nl.bldn.project.stublime.service.StubResponseService;
+import nl.bldn.project.stublime.timing.StubDelayService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

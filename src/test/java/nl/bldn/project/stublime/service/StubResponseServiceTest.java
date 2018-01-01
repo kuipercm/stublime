@@ -15,6 +15,8 @@ import nl.bldn.project.stublime.model.ResponseDefinition;
 import nl.bldn.project.stublime.model.ResponseKey;
 import nl.bldn.project.stublime.model.ResponseTiming;
 import nl.bldn.project.stublime.model.StubResponse;
+import nl.bldn.project.stublime.repository.impl.InMemoryStubResponseRepository;
+import nl.bldn.project.stublime.validation.StubResponseValidator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,13 +26,13 @@ import org.springframework.http.HttpMethod;
 public class StubResponseServiceTest {
     private static final String SALE_ID_123 = "/sale/id/123";
 
-    private StubResponseRepository stubResponseRepository;
+    private InMemoryStubResponseRepository stubResponseRepository;
     private StubResponseValidator stubResponseValidator;
     private StubResponseService sut;
 
     @Before
     public void setup() {
-        stubResponseRepository = mock(StubResponseRepository.class);
+        stubResponseRepository = mock(InMemoryStubResponseRepository.class);
         stubResponseValidator = mock(StubResponseValidator.class);
 
         sut = new StubResponseService(stubResponseRepository, stubResponseValidator);
@@ -91,62 +93,6 @@ public class StubResponseServiceTest {
         verify(stubResponseRepository).saveStubResponse(captor.capture());
 
         assertThat(captor.getValue().getKey().getCompiledResource().pattern()).isEqualTo(SALE_ID_123);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    public void when_setting_response_then_jsonpath_expressions_are_compiled_and_set_as_predicate_when_bodytype_is_json() {
-        List<String> bodySignatureExpressions = new ArrayList<>();
-        bodySignatureExpressions.add("$[0].id");
-        bodySignatureExpressions.add("$[2].name");
-
-        StubResponse stubResponse = StubResponse.builder()
-                .key(ResponseKey.builder()
-                        .resource(SALE_ID_123)
-                        .bodyType("JSON")
-                        .bodySignatureExpressions(bodySignatureExpressions)
-                        .build())
-                .build();
-
-        sut.setStubResponse(stubResponse);
-
-        ArgumentCaptor<StubResponse> captor = ArgumentCaptor.forClass(StubResponse.class);
-        verify(stubResponseRepository).saveStubResponse(captor.capture());
-
-        ResponseKey key = captor.getValue().getKey();
-        assertThat(key.getBodySignaturePredicate()).isNotNull();
-
-        List<?> signatureExpressions = key.getBodySignaturePredicate().getBodySignatureExpressions();
-        assertThat(signatureExpressions).isNotNull();
-        assertThat(signatureExpressions).isNotEmpty();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    public void when_setting_response_then_xpath_expressions_are_compiled_and_set_as_predicate_when_bodytype_is_xml() {
-        List<String> bodySignatureExpressions = new ArrayList<>();
-        bodySignatureExpressions.add("/body/id");
-        bodySignatureExpressions.add("/body/name");
-
-        StubResponse stubResponse = StubResponse.builder()
-                .key(ResponseKey.builder()
-                        .resource(SALE_ID_123)
-                        .bodyType("XML")
-                        .bodySignatureExpressions(bodySignatureExpressions)
-                        .build())
-                .build();
-
-        sut.setStubResponse(stubResponse);
-
-        ArgumentCaptor<StubResponse> captor = ArgumentCaptor.forClass(StubResponse.class);
-        verify(stubResponseRepository).saveStubResponse(captor.capture());
-
-        ResponseKey key = captor.getValue().getKey();
-        assertThat(key.getBodySignaturePredicate()).isNotNull();
-
-        List<?> signatureExpressions = key.getBodySignaturePredicate().getBodySignatureExpressions();
-        assertThat(signatureExpressions).isNotNull();
-        assertThat(signatureExpressions).isNotEmpty();
     }
 
     private StubResponse createStubResponse() {

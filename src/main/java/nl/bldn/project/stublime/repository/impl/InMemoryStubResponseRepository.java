@@ -1,4 +1,4 @@
-package nl.bldn.project.stublime.service;
+package nl.bldn.project.stublime.repository.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,22 +10,28 @@ import java.util.regex.Pattern;
 
 import nl.bldn.project.stublime.model.ResponseKey;
 import nl.bldn.project.stublime.model.StubResponse;
+import nl.bldn.project.stublime.repository.StubResponseRepository;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Repository;
 
 import lombok.Value;
 
-public class StubResponseRepository {
+@Repository
+public class InMemoryStubResponseRepository implements StubResponseRepository {
     private final Map<Pattern, StubResponse> allResponses = new LinkedHashMap<>();
 
+    @Override
     public List<StubResponse> getAllStubResponses() {
         return new ArrayList<>(allResponses.values());
     }
 
+    @Override
     public void saveStubResponse(StubResponse stubResponse) {
         allResponses.put(stubResponse.getKey().getCompiledResource(), stubResponse);
     }
 
+    @Override
     public StubResponse getStubResponse(String resource, HttpMethod method, String requestBody) {
 
         MatcherStubResponse response = allResponses.entrySet().stream()

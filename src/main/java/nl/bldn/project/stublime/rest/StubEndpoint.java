@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import nl.bldn.project.stublime.model.ResponseDefinition;
 import nl.bldn.project.stublime.model.StubResponse;
-import nl.bldn.project.stublime.service.StubDelayService;
 import nl.bldn.project.stublime.service.StubResponseService;
+import nl.bldn.project.stublime.timing.StubDelayService;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;

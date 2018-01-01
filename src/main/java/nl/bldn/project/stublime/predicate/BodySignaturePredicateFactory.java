@@ -12,6 +12,8 @@ import javax.xml.xpath.XPathFactory;
 
 import com.jayway.jsonpath.JsonPath;
 
+import lombok.NonNull;
+
 public class BodySignaturePredicateFactory {
     public static final String BODY_TYPE_JSON = "JSON";
     public static final String BODY_TYPE_XML = "XML";
@@ -23,7 +25,13 @@ public class BodySignaturePredicateFactory {
         //don't instantiate
     }
 
-    public static BodySignaturePredicate<?> createBodySignaturePredicate(String bodyType, String expectedBodySignature, String joiner, List<String> bodySignatureExpressions) {
+    public static BodySignaturePredicate<?> createBodySignaturePredicate(
+            @NonNull String bodyType,
+            @NonNull String expectedBodySignature,
+            @NonNull String joiner,
+            @NonNull List<String> bodySignatureExpressions
+    ) {
+
         if (BODY_TYPE_JSON.equalsIgnoreCase(bodyType)) {
             List<JsonPath> transformed = bodySignatureExpressions.stream()
                     .map(JsonPath::compile)

@@ -1,4 +1,4 @@
-package nl.bldn.project.stublime.service;
+package nl.bldn.project.stublime.repository.impl;
 
 import static nl.bldn.project.stublime.model.ResponseKey.DEFAULT_EMPTY_STRING_JOINER;
 import static nl.bldn.project.stublime.predicate.BodySignaturePredicateFactory.BODY_TYPE_JSON;
@@ -15,6 +15,7 @@ import nl.bldn.project.stublime.model.ResponseDefinition;
 import nl.bldn.project.stublime.model.ResponseKey;
 import nl.bldn.project.stublime.model.ResponseTiming;
 import nl.bldn.project.stublime.model.StubResponse;
+import nl.bldn.project.stublime.repository.StubResponseRepository;
 
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
@@ -23,7 +24,7 @@ public class StubResponseRepositoryTest {
     private static final String SALE_ID_123 = "/sale/id/123";
     private static final String SALE_NAME_JOHNSON = "/sale/name/johnson";
 
-    private final StubResponseRepository sut = new StubResponseRepository();
+    private final StubResponseRepository sut = new InMemoryStubResponseRepository();
 
     @Test
     public void when_no_responses_set_then_all_responses_is_emptylist() {
