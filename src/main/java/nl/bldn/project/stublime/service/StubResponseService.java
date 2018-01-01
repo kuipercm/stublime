@@ -30,7 +30,7 @@ public class StubResponseService {
         return repository.getStubResponse(resource, method, requestBody);
     }
 
-    public void setStubResponse(StubResponse stubResponse) {
+    public StubResponse setStubResponse(StubResponse stubResponse) {
         validator.validateStubResponse(stubResponse);
 
         ResponseKey key = stubResponse.getKey();
@@ -45,7 +45,11 @@ public class StubResponseService {
             key.setBodySignaturePredicate(createBodySignaturePredicate(key.getBodyType(), key.getExpectedBodySignature(), key.getSignatureElementsJoiner(), key.getBodySignatureExpressions()));
         }
 
-        repository.saveStubResponse(stubResponse);
+        return repository.saveStubResponse(stubResponse);
+    }
+
+    public void deleteStubResponse(UUID responseId) {
+        repository.deleteResponseById(responseId);
     }
 
 

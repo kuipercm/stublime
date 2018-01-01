@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import nl.bldn.project.stublime.model.ResponseKey;
 import nl.bldn.project.stublime.model.StubResponse;
@@ -19,7 +19,7 @@ import lombok.Value;
 
 @Repository
 public class InMemoryStubResponseRepository implements StubResponseRepository {
-    private final Map<Pattern, StubResponse> allResponses = new LinkedHashMap<>();
+    private final Map<UUID, StubResponse> allResponses = new LinkedHashMap<>();
 
     @Override
     public List<StubResponse> getAllStubResponses() {
@@ -27,15 +27,21 @@ public class InMemoryStubResponseRepository implements StubResponseRepository {
     }
 
     @Override
-    public void saveStubResponse(StubResponse stubResponse) {
-        allResponses.put(stubResponse.getKey().getCompiledResource(), stubResponse);
+    public StubResponse saveStubResponse(StubResponse stubResponse) {
+        allResponses.put(stubResponse.getKey().getId(), stubResponse);
+        return stubResponse;
+    }
+
+    @Override
+    public void deleteResponseById(UUID responseId) {
+        allResponses.remove(responseId);
     }
 
     @Override
     public StubResponse getStubResponse(String resource, HttpMethod method, String requestBody) {
 
-        MatcherStubResponse response = allResponses.entrySet().stream()
-                .map(e -> new MatcherStubResponse(e.getKey().matcher(resource), e.getValue()))
+        MatcherStubResponse response = allResponses.values().stream()
+                .map(stubResponse -> new MatcherStubResponse(stubResponse.getKey().getCompiledResource().matcher(resource), stubResponse))
                 .filter(msr -> msr.matcher.find())
                 .filter(msr -> {
                     ResponseKey key = msr.stubResponse.getKey();

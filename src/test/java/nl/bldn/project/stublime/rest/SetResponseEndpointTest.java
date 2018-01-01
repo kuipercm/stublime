@@ -45,9 +45,74 @@ public class SetResponseEndpointTest {
         StubResponse stubResponse = StubResponse.builder()
                 .key(ResponseKey.builder().id(UUID.randomUUID()).build())
                 .build();
-        sut.setNewResponse(stubResponse);
+        sut.save(stubResponse);
 
         verify(stubResponseService).setStubResponse(stubResponse);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void when_saving_a_response_and_the_response_is_null_than_an_exception_is_thrown() {
+        sut.save(null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void when_saving_a_response_and_the_response_key_is_null_than_an_exception_is_thrown() {
+        sut.save(StubResponse.builder().build());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void when_updating_a_response_and_the_id_is_null_than_an_exception_is_thrown() {
+        UUID id = UUID.randomUUID();
+        StubResponse stubResponse = StubResponse.builder()
+                .key(ResponseKey.builder()
+                        .id(id)
+                        .build())
+                .build();
+        sut.update(null, stubResponse);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void when_updating_a_response_and_the_response_is_null_than_an_exception_is_thrown() {
+        UUID id = UUID.randomUUID();
+        sut.update(id, null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void when_updating_a_response_and_the_response_key_is_null_than_an_exception_is_thrown() {
+        UUID id = UUID.randomUUID();
+        StubResponse stubResponse = StubResponse.builder().build();
+        sut.update(id, stubResponse);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void when_updating_a_response_and_the_response_id_doesnt_match_the_url_id_is_null_than_an_exception_is_thrown() {
+        StubResponse stubResponse = StubResponse.builder().key(ResponseKey.builder().id(UUID.randomUUID()).build()).build();
+        sut.update(UUID.randomUUID(), stubResponse);
+    }
+
+    @Test
+    public void when_updating_a_response_the_response_is_forwarded_to_the_service() {
+        UUID id = UUID.randomUUID();
+        StubResponse stubResponse = StubResponse.builder()
+                .key(ResponseKey.builder()
+                        .id(id)
+                        .build())
+                .build();
+        sut.update(id, stubResponse);
+
+        verify(stubResponseService).setStubResponse(stubResponse);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void when_deleting_a_response_and_the_id_is_null_than_an_exception_is_thrown() {
+        sut.delete(null);
+    }
+
+    @Test
+    public void when_deleting_a_response_then_the_call_is_forwarded_to_the_service() {
+        UUID id = UUID.randomUUID();
+        sut.delete(id);
+
+        verify(stubResponseService).deleteStubResponse(id);
+    }
 }

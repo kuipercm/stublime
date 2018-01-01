@@ -1,10 +1,13 @@
 package nl.bldn.project.stublime.rest;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -16,8 +19,10 @@ import nl.bldn.project.stublime.model.ResponseKey;
 import nl.bldn.project.stublime.model.StubResponse;
 import nl.bldn.project.stublime.service.StubResponseService;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -41,6 +46,11 @@ public class SetResponseEndpointIT {
     @Autowired
     private SetResponseEndpoint sut;
 
+    @Before
+    public void setup() {
+        when(service.setStubResponse(any(StubResponse.class))).then((Answer<StubResponse>) invocationOnMock -> invocationOnMock.getArgumentAt(0, StubResponse.class));
+    }
+
     @Test
     public void when_executing_get_then_all_responses_are_returned() throws Exception {
         UUID keyId = UUID.randomUUID();
@@ -58,15 +68,42 @@ public class SetResponseEndpointIT {
     }
 
     @Test
-    public void when_posting_new_response_then_success_status_is_returned() throws Exception {
+    public void when_posting_new_response_then_success_status_and_the_uuid_is_returned() throws Exception {
         UUID keyId = UUID.randomUUID();
 
         mockMvc.perform(post("/response").contentType(APPLICATION_JSON).content("{\"key\": {\"id\": \"" + keyId.toString() + "\"}}"))
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.key.id").value(keyId.toString()));
 
         verify(service).setStubResponse(StubResponse.builder()
                 .key(ResponseKey.builder().id(keyId).build())
                 .build());
+    }
+
+    @Test
+    public void when_updating_an_existing_response_then_success_status_is_returned() throws Exception {
+        UUID keyId = UUID.randomUUID();
+
+        mockMvc.perform(put("/response/{responseId}", keyId)
+                .contentType(APPLICATION_JSON)
+                .content("{\"key\": {\"id\": \"" + keyId.toString() + "\"}}"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.key.id").value(keyId.toString()));
+
+        verify(service).setStubResponse(StubResponse.builder()
+                .key(ResponseKey.builder().id(keyId).build())
+                .build());
+    }
+
+    @Test
+    public void when_deleting_an_existing_response_then_success_status_is_returned() throws Exception {
+        UUID keyId = UUID.randomUUID();
+
+        mockMvc.perform(delete("/response/{responseId}", keyId)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful());
+
+        verify(service).deleteStubResponse(keyId);
     }
 
 

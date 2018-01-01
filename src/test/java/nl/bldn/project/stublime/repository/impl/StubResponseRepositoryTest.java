@@ -9,6 +9,7 @@ import static org.springframework.http.HttpMethod.POST;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import nl.bldn.project.stublime.model.ResponseDefinition;
@@ -110,6 +111,19 @@ public class StubResponseRepositoryTest {
         assertThat(stubResponse).isNull();
     }
 
+    @Test
+    public void when_setting_stub_response_with_same_id_twice_then_second_save_replaces_first() {
+        StubResponse stubResponse1 = createStubResponse(SALE_ID_123);
+        sut.saveStubResponse(stubResponse1);
+
+        StubResponse stubResponse2 = createStubResponse(SALE_ID_123);
+        stubResponse2.getKey().setId(stubResponse1.getKey().getId());
+        sut.saveStubResponse(stubResponse2);
+
+        assertThat(sut.getAllStubResponses()).hasSize(1);
+        assertThat(sut.getStubResponse(SALE_ID_123, GET, "").getKey().getId()).isNotNull();
+    }
+
     private StubResponse createStubResponse(String resource) {
         return createStubResponse(resource, null);
     }
@@ -120,6 +134,7 @@ public class StubResponseRepositoryTest {
                         .resource(resource)
                         .httpMethod(method)
                         .compiledResource(Pattern.compile(resource))
+                        .id(UUID.randomUUID())
                         .build())
                 .response(ResponseDefinition.builder().build())
                 .responseTiming(ResponseTiming.builder().build())
