@@ -1,0 +1,2 @@
+[![Build Status](https://img.shields.io/travis/kuipercm/stublime.svg?style=plastic)](https://travis-ci.org/kuipercm/stublime)
+[![Coveralls](https://img.shields.io/coveralls/kuipercm/stublime.svg?style=plastic)](https://coveralls.io/r/kuipercm/stublime)
