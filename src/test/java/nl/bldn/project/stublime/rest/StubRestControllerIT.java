@@ -1,6 +1,6 @@
 package nl.bldn.project.stublime.rest;
 
-import static nl.bldn.project.stublime.rest.StubEndpoint.STUB_ROOT;
+import static nl.bldn.project.stublime.rest.StubRestController.STUB_ROOT;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -25,8 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
-@ContextConfiguration(classes = StubEndpointIT.TestConfiguration.class)
-public class StubEndpointIT {
+@ContextConfiguration(classes = StubRestControllerIT.TestConfiguration.class)
+public class StubRestControllerIT {
     private static final String SALE_ID_123 = "/sale/id/123";
 
     @Autowired
@@ -38,7 +38,7 @@ public class StubEndpointIT {
     private StubDelayService stubDelayService;
 
     @Autowired
-    private StubEndpoint sut;
+    private StubRestController sut;
 
     @Test
     public void when_request_to_stub_endpoint_then_response_is_determined_from_service_using_path_method_and_body() throws Exception {
@@ -66,7 +66,7 @@ public class StubEndpointIT {
 
 
     @Configuration
-    @Import(StubEndpoint.class)
+    @Import(StubRestController.class)
     static class TestConfiguration {
 
     }

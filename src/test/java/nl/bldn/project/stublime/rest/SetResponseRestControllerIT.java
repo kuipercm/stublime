@@ -34,8 +34,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
-@ContextConfiguration(classes = SetResponseEndpointIT.TestConfiguration.class)
-public class SetResponseEndpointIT {
+@ContextConfiguration(classes = SetResponseRestControllerIT.TestConfiguration.class)
+public class SetResponseRestControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,7 +44,7 @@ public class SetResponseEndpointIT {
     private StubResponseService service;
 
     @Autowired
-    private SetResponseEndpoint sut;
+    private SetResponseRestController sut;
 
     @Before
     public void setup() {
@@ -108,7 +108,7 @@ public class SetResponseEndpointIT {
 
 
     @Configuration
-    @Import(SetResponseEndpoint.class)
+    @Import(SetResponseRestController.class)
     static class TestConfiguration {
 
     }

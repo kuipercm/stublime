@@ -23,7 +23,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping(path = "/response", produces = APPLICATION_JSON_VALUE)
 @AllArgsConstructor
-public class SetResponseEndpoint {
+public class SetResponseRestController {
     private final StubResponseService responseService;
 
     @GetMapping

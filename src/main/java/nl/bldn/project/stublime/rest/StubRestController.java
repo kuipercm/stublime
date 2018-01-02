@@ -1,6 +1,6 @@
 package nl.bldn.project.stublime.rest;
 
-import static nl.bldn.project.stublime.rest.StubEndpoint.STUB_ROOT;
+import static nl.bldn.project.stublime.rest.StubRestController.STUB_ROOT;
 import static org.springframework.http.HttpMethod.resolve;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(path = STUB_ROOT + "/**")
 @AllArgsConstructor
 @Slf4j
-public class StubEndpoint {
+public class StubRestController {
     static final String STUB_ROOT = "/stub";
 
     private final StubResponseService responseService;

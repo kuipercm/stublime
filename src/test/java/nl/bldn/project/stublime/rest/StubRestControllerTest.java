@@ -1,6 +1,6 @@
 package nl.bldn.project.stublime.rest;
 
-import static nl.bldn.project.stublime.rest.StubEndpoint.STUB_ROOT;
+import static nl.bldn.project.stublime.rest.StubRestController.STUB_ROOT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -28,19 +28,19 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-public class StubEndpointTest {
+public class StubRestControllerTest {
     private static final String SALE_ID_123 = "/sale/id/123";
 
     private StubResponseService stubResponseService;
     private StubDelayService stubDelayService;
-    private StubEndpoint sut;
+    private StubRestController sut;
 
     @Before
     public void setup() {
         stubResponseService = mock(StubResponseService.class);
         stubDelayService = mock(StubDelayService.class);
 
-        sut = new StubEndpoint(stubResponseService, stubDelayService);
+        sut = new StubRestController(stubResponseService, stubDelayService);
     }
 
     @Test

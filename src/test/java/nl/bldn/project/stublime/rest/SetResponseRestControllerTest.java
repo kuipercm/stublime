@@ -16,15 +16,15 @@ import nl.bldn.project.stublime.service.StubResponseService;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SetResponseEndpointTest {
+public class SetResponseRestControllerTest {
 
     private StubResponseService stubResponseService;
-    private SetResponseEndpoint sut;
+    private SetResponseRestController sut;
 
     @Before
     public void setup() {
         stubResponseService = mock(StubResponseService.class);
-        sut = new SetResponseEndpoint(stubResponseService);
+        sut = new SetResponseRestController(stubResponseService);
     }
 
     @Test
