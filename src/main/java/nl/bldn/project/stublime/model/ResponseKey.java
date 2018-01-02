@@ -9,6 +9,7 @@ import nl.bldn.project.stublime.predicate.BodySignaturePredicate;
 
 import org.springframework.http.HttpMethod;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
@@ -41,7 +42,7 @@ public final class ResponseKey {
     private Pattern compiledResource;
     @Setter
     private UUID id;
-    @Setter
+    @Setter @JsonIgnore
     BodySignaturePredicate<?> bodySignaturePredicate;
 
     @JsonPOJOBuilder(withPrefix = "")
