@@ -2,6 +2,7 @@ package nl.bldn.project.stublime.validation.impl;
 
 import static lombok.Lombok.checkNotNull;
 
+import nl.bldn.project.stublime.model.ResponseTiming;
 import nl.bldn.project.stublime.model.StubResponse;
 import nl.bldn.project.stublime.validation.StubResponseValidator;
 
@@ -21,5 +22,19 @@ public class DefaultStubResponseValidator implements StubResponseValidator {
         }
 
         checkNotNull(response.getResponse(), "responseValue");
+
+        ResponseTiming responseTiming = response.getResponseTiming();
+        if (responseTiming != null) {
+            if (responseTiming.getMinimumDelay() < 0) {
+                throw new IllegalArgumentException("Minimum response time should be larger than zero when set.");
+            }
+            if (responseTiming.getMaximumDelay() < 0) {
+                throw new IllegalArgumentException("Minimum response time should be larger than zero when set.");
+            }
+
+            if (responseTiming.getMaximumDelay() < responseTiming.getMinimumDelay()) {
+                throw new IllegalArgumentException("Maximum response time should be more or equal to minimum response time");
+            }
+        }
     }
 }
