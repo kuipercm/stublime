@@ -124,6 +124,17 @@ public class StubResponseRepositoryTest {
         assertThat(sut.getStubResponse(SALE_ID_123, GET, "").getKey().getId()).isNotNull();
     }
 
+    @Test
+    public void when_setting_stub_response_with_pattern_gets_matched() {
+        StubResponse stubResponse1 = createStubResponse("sale/id/\\d*");
+        sut.saveStubResponse(stubResponse1);
+
+        assertThat(sut.getAllStubResponses()).hasSize(1);
+        assertThat(sut.getStubResponse(SALE_ID_123, GET, "")).isNotNull();
+        assertThat(sut.getStubResponse("sale/id/456", GET, "")).isNotNull();
+        assertThat(sut.getStubResponse(SALE_NAME_JOHNSON, GET, "")).isNull();
+    }
+
     private StubResponse createStubResponse(String resource) {
         return createStubResponse(resource, null);
     }

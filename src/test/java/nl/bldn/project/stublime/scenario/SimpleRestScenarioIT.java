@@ -129,6 +129,25 @@ public class SimpleRestScenarioIT {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    public void when_setting_a_response_using_pattern_matching_then_the_response_is_returned_on_any_matching_request() throws Exception {
+        mockMvc.perform(post("/response")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"key\": {\"resource\": \"/sales/id/[0-9]+\", \"httpMethod\": \"GET\"}, \"response\": {\"responseContent\": \"hello world\"}}"))
+                .andExpect(status().is2xxSuccessful());
+
+        mockMvc.perform(get("/stub/sales/id/123"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().string("hello world"));
+
+        mockMvc.perform(get("/stub/sales/id/9999"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().string("hello world"));
+
+        mockMvc.perform(get("/stub/sales/id/apple"))
+                .andExpect(status().isNotFound());
+    }
+
     private static class ResultCatcher {
         @Getter
         @Setter
