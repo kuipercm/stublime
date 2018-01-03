@@ -39,6 +39,19 @@ response, like so:
     } 
 }
 ```
+6. Additionally, it's possible to set the response content type, for example
+```$json
+{
+    "key": {
+        "resource": "sales/id/123",
+        "httpMethod": "GET"
+    },
+    "response": {
+        "responseContent": "{\"id\": 123}",
+        "responseContentType": "application/json"
+    } 
+}
+```
 
 ### REST example using pattern matching
 
@@ -111,3 +124,40 @@ but not with the body
 }
 ```
 since the code is missing and the calculated body signature doesn't match the set version.
+
+## Delayed responses
+
+It's possible to configure the application to delay responses to mimic real response times of remote services.
+
+1. To set a delay time, POST the following to ```http://localhost:8080/rest/response```
+```$json
+{
+    "key": {
+        "resource": "sales/id/123",
+        "httpMethod": "GET"
+    },
+    "response": {
+        "responseContent": "hello world"
+    },
+    "responseTiming": {
+        "minimumDelay": 200,
+        "maximumDelay": 200
+    }
+}
+```
+2. This will delay the response by 200 milliseconds. The execution time of the stub itself is included in this number,
+meaning that if it would take 100 milliseconds to compute the response from the stub, the response is delayed for another
+100 milliseconds to make the total 200 milliseconds.
+
+**Note** it's a requirement that the maximumDelay should always be greater or equal to the minimumDelay.
+**Note** all delay values are in milliseconds.
+
+### Default delay behavior
+
+The default behavior of the stub is to delay for the minimum delay duration for all calls that match the configured key.
+
+### Gaussian random delay behavior
+
+By starting the app with the commandline property ```--stublime.delay.type=gaussian```, the response delay will
+behave with a randomized delay following a Gaussian (normal) distribution between the minimum and maximum delays for all
+calls that match the configured key.

@@ -3,6 +3,8 @@ package nl.bldn.project.stublime.rest;
 import static nl.bldn.project.stublime.rest.StubRestController.STUB_ROOT;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,6 +55,22 @@ public class StubRestControllerIT {
         mockMvc.perform(get(STUB_ROOT + SALE_ID_123))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().string("hello world"));
+    }
+
+    @Test
+    public void when_request_to_stub_endpoint_then_response_has_set_content_type() throws Exception {
+        when(stubResponseService.getStubResponse(SALE_ID_123, GET, ""))
+                .thenReturn(StubResponse.builder()
+                        .response(ResponseDefinition.builder()
+                                .responseContent("hello world")
+                                .responseStatusCode(200)
+                                .responseContentType(APPLICATION_JSON_VALUE)
+                                .build())
+                        .build());
+
+        mockMvc.perform(get(STUB_ROOT + SALE_ID_123))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().contentType(APPLICATION_JSON));
     }
 
     @Test

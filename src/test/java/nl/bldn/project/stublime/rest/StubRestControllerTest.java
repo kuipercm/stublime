@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.servlet.HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE;
 
 import java.io.IOException;
@@ -50,6 +52,7 @@ public class StubRestControllerTest {
                         .response(ResponseDefinition.builder()
                                 .responseContent("hello world")
                                 .responseStatusCode(200)
+                                .responseContentType(APPLICATION_JSON_VALUE)
                                 .build())
                         .build());
 
@@ -58,6 +61,7 @@ public class StubRestControllerTest {
 
         assertThat(stubResponse.getStatusCode()).isEqualTo(OK);
         assertThat(stubResponse.getBody()).isEqualTo("hello world");
+        assertThat(stubResponse.getHeaders().getContentType()).isEqualTo(APPLICATION_JSON);
     }
 
     @Test
@@ -94,7 +98,9 @@ public class StubRestControllerTest {
                         .build());
 
         MockHttpServletRequest request = createRequest(STUB_ROOT + SALE_ID_123, GET);
-        sut.stub(request);
+        ResponseEntity<String> entity = sut.stub(request);
+
+        assertThat(entity.getHeaders().getContentType()).isNull();
 
         verify(stubDelayService).delayResponse(eq(responseTiming), any(Long.class));
     }

@@ -18,6 +18,7 @@ import lombok.ToString;
 public final class ResponseDefinition {
     private final String responseContent;
     private final int responseStatusCode;
+    private final String responseContentType;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class ResponseDefinitionBuilder {

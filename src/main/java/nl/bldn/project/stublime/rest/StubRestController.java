@@ -1,6 +1,7 @@
 package nl.bldn.project.stublime.rest;
 
 import static nl.bldn.project.stublime.rest.StubRestController.STUB_ROOT;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.resolve;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -59,7 +60,13 @@ public class StubRestController {
         delayService.delayResponse(stubResponse.getResponseTiming(), stopWatch.getLastTaskTimeMillis());
 
         ResponseDefinition response = stubResponse.getResponse();
-        return new ResponseEntity<>(response.getResponseContent(), HttpStatus.valueOf(response.getResponseStatusCode()));
+        ResponseEntity.BodyBuilder builder = ResponseEntity.status(response.getResponseStatusCode());
+
+        if(response.getResponseContentType() != null) {
+            builder.header(CONTENT_TYPE, response.getResponseContentType());
+        }
+
+        return builder.body(response.getResponseContent());
     }
 
     private static String removeStubRootPath(String urlPath) {
