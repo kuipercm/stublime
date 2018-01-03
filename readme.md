@@ -150,6 +150,7 @@ meaning that if it would take 100 milliseconds to compute the response from the 
 100 milliseconds to make the total 200 milliseconds.
 
 **Note** it's a requirement that the maximumDelay should always be greater or equal to the minimumDelay.
+
 **Note** all delay values are in milliseconds.
 
 ### Default delay behavior
