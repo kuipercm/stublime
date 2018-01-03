@@ -33,7 +33,7 @@ public class JsonBodySignaturePredicate implements BodySignaturePredicate<JsonPa
         if (expectedBodySignature == null) {
             return true;
         }
-        if (requestBody == null) {
+        if (requestBody == null || requestBody.isEmpty()) {
             return false;
         }
 

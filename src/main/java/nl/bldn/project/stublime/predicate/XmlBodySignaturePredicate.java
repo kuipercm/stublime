@@ -43,7 +43,7 @@ public class XmlBodySignaturePredicate implements BodySignaturePredicate<XPathEx
         if (expectedBodySignature == null) {
             return true;
         }
-        if (requestBody == null) {
+        if (requestBody == null || requestBody.isEmpty()) {
             return false;
         }
         if (expectedBodySignature.length() == 0 && bodySignatureExpressions.isEmpty()) {
