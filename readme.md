@@ -87,11 +87,11 @@ to differentiate between requests.
 }
 ```
 2. There are a few new elements in this key:
-    ```bodyType``` represents the type of body to expect. For now, the only option is "JSON".
-    ```bodySignatureExpressions``` and the ```signatureElementsJoiner```. The signature expressions are a list of, in the
+   ```bodyType``` represents the type of body to expect. For now, the only option is "JSON".
+   ```bodySignatureExpressions``` and the ```signatureElementsJoiner```. The signature expressions are a list of, in the
 case of a JSON body, [JsonPath](https://github.com/json-path/JsonPath) expressions that, when evaluated against the
 incoming request body, and joined together using the joiner, form a "body signature".
-    ```expectedBodySignature``` represents the expected value that should match the body signature to return this response.
+   ```expectedBodySignature``` represents the expected value that should match the body signature to return this response.
 3. The above response will match incoming requests like a POST to ```http://localhost:8080/rest/stub/sales/id/1``` with
 the (application/json) body
 ```$json
